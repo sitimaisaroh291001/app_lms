@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'announcement_detail_page.dart';
+
 
 
 class DashboardPage extends StatefulWidget {
@@ -198,10 +198,18 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   const SizedBox(height: 12),
                   // Banner Image Placeholder
-                  // Banner Image Placeholder
+                  // Banner Image
                   GestureDetector(
                     onTap: () => context.push('/announcement-detail'), // Direct link for better UX
-                    child: const MaintenanceBannerWidget(), // Shared widget from Detail Page
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        'assets/images/maintenance_banner.png',
+                        width: double.infinity,
+                        height: 160,
+                        fit: BoxFit.cover,
+                      ),
+                    ), 
                   ),
 
                   const SizedBox(height: 24),

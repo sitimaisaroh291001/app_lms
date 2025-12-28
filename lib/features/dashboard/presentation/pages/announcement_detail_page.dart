@@ -57,8 +57,15 @@ class AnnouncementDetailPage extends StatelessWidget {
             
             const SizedBox(height: 24),
             
-            // Banner Image Simulation (Sophisticated)
-            const MaintenanceBannerWidget(),
+            // Banner Image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                'assets/images/maintenance_banner.png',
+                width: double.infinity, 
+                fit: BoxFit.fitWidth,
+              ),
+            ),
             
             const SizedBox(height: 24),
             
@@ -97,164 +104,4 @@ class AnnouncementDetailPage extends StatelessWidget {
   }
 }
 
-class MaintenanceBannerWidget extends StatelessWidget {
-  const MaintenanceBannerWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 220,
-      decoration: BoxDecoration(
-        color: const Color(0xFFE3F2FD), // Light Blue
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
-        children: [
-            // Background Elements (Grid/Clouds)
-            Positioned(
-              right: 20,
-              top: 20,
-              child: Icon(Icons.cloud, color: Colors.white.withValues(alpha: 0.5), size: 40),
-            ),
-            Positioned(
-              left: 40,
-              bottom: 40,
-              child: Icon(Icons.cloud, color: Colors.white.withValues(alpha: 0.5), size: 60),
-            ),
-            
-            // Central Laptop & Graphics
-            Center(
-              child: SizedBox(
-                width: 200,
-                height: 150,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Laptop Screen Body
-                    Positioned(
-                      bottom: 20,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 160,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.black87,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.grey[400]!, width: 4),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 140,
-                                height: 80,
-                                color: Colors.white,
-                                child: Stack(
-                                  children: [
-                                     Container(color: Colors.red[50]),
-                                     Center(child: Icon(Icons.warning_amber_rounded, size: 40, color: Colors.orange)),
-                                     // "Maintenance" text inside screen
-                                     Positioned(
-                                       bottom: 5,
-                                       left: 0, 
-                                       right: 0,
-                                       child: Text(
-                                         'MAINTENANCE',
-                                         textAlign: TextAlign.center,
-                                         style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red),
-                                       ),
-                                     )
-                                  ]
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 180,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8))
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    
-                    // Workers
-                    Positioned(
-                      bottom: 20,
-                      left: 0,
-                      child: Icon(Icons.engineering, color: Colors.orange[800], size: 30),
-                    ),
-                    Positioned(
-                      top: 10,
-                      right: 10, // Sitting on top
-                      child: Icon(Icons.person, color: Colors.deepPurple[400], size: 24),
-                    ),
-                    
-                    // Gear Icons
-                     Positioned(
-                      top: 40,
-                      left: -20,
-                      child: Icon(Icons.settings, color: Colors.orange, size: 24),
-                    ),
-                     Positioned(
-                      bottom: 40,
-                      right: -10,
-                      child: Icon(Icons.settings, color: Colors.orange, size: 18),
-                    ),
-                    
-                    // Construction Tape
-                    Positioned(
-                      bottom: 50,
-                      left: 20,
-                      right: 20,
-                      child: Container(
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: Colors.yellow,
-                          gradient: LinearGradient(
-                            stops: const [0.1, 0.1, 0.2, 0.2, 0.3, 0.3],
-                            colors: [
-                              Colors.yellow,
-                              Colors.black,
-                              Colors.yellow,
-                              Colors.black,
-                              Colors.yellow,
-                              Colors.black
-                            ],
-                            tileMode: TileMode.repeated
-                          )
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-             // Text: Maintenance LMS
-             Positioned(
-               top: 20,
-               left: 24,
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                    Row(
-                      children: const [
-                         Icon(Icons.school, size: 16, color: Colors.red),
-                         SizedBox(width: 4),
-                         Text('Telkom University', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10)),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const Text('Maintenance LMS', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 14)),
-                 ],
-               ),
-             )
-        ],
-      ),
-    );
-  }
-}

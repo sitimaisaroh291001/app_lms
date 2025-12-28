@@ -355,7 +355,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 _selectedIndex = index;
               });
               if (index == 1) context.push('/course-list');
-              if (index == 2) context.push('/profile');
+              if (index == 2) context.push('/notification');
+              if (index == 3) context.push('/profile');
             },
             items: const [
               BottomNavigationBarItem(
@@ -367,8 +368,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 label: 'Kelas Saya',
               ),
               BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: 'Notifikasi',
+              ),
+              BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                label: 'Profile', // Request said "Profile", UI might imply Notifikasi, keeping Profile as per request
+                label: 'Profile', 
               ),
             ],
           ),

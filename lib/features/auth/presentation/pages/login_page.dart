@@ -12,6 +12,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
 
   @override
@@ -98,8 +99,10 @@ class _LoginPageState extends State<LoginPage> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Center(
                             child: Text(
@@ -114,8 +117,17 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 30),
                           
                           // Email 365 Input
-                          TextField(
+                          TextFormField(
                             controller: _usernameController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Email 365 tidak boleh kosong';
+                              }
+                              if (!value.contains('@365.telkomuniversity.ac.id')) {
+                                return 'Gunakan domain @365.telkomuniversity.ac.id';
+                              }
+                              return null;
+                            },
                             decoration: const InputDecoration(
                               labelText: 'Email 365',
                               hintText: 'username@365.telkomuniversity.ac.id',
@@ -128,16 +140,21 @@ class _LoginPageState extends State<LoginPage> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: AppTheme.primaryColor, width: 2),
                               ),
-                              filled: false,
                               contentPadding: EdgeInsets.symmetric(vertical: 12),
                             ),
                           ),
                           const SizedBox(height: 20),
 
                           // Password Input
-                          TextField(
+                          TextFormField(
                             controller: _passwordController,
                             obscureText: !_isPasswordVisible,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Password tidak boleh kosong';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                               labelText: 'Password',
                               suffixIcon: IconButton(
@@ -160,7 +177,6 @@ class _LoginPageState extends State<LoginPage> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: AppTheme.primaryColor, width: 2),
                               ),
-                              filled: false,
                               contentPadding: const EdgeInsets.symmetric(vertical: 12),
                             ),
                           ),
@@ -182,7 +198,9 @@ class _LoginPageState extends State<LoginPage> {
 
                               ),
                               onPressed: () {
-                                context.go('/dashboard');
+                                if (_formKey.currentState!.validate()) {
+                                  context.go('/dashboard');
+                                }
                               },
                               child: const Text(
                                 'Log In',
@@ -238,6 +256,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
+                    ),
                     ),
                   ),
                 ],

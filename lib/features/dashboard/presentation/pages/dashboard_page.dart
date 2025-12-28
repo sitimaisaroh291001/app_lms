@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'announcement_detail_page.dart';
 
 
 class DashboardPage extends StatefulWidget {
@@ -197,32 +198,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   const SizedBox(height: 12),
                   // Banner Image Placeholder
-                  Container(
-                    height: 140,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Stack(
-                      children: [
-                         Positioned(
-                           right: 0,
-                           bottom: 0,
-                           child: Icon(Icons.build_circle_outlined, size: 80, color: Colors.blue.withValues(alpha: 0.2)),
-                         ),
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.image, size: 40, color: Colors.grey),
-                              SizedBox(height: 8),
-                              Text('Banner Announcement', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  // Banner Image Placeholder
+                  GestureDetector(
+                    onTap: () => context.push('/announcement-detail'), // Direct link for better UX
+                    child: const MaintenanceBannerWidget(), // Shared widget from Detail Page
                   ),
 
                   const SizedBox(height: 24),

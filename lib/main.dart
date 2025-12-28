@@ -8,6 +8,7 @@ import 'features/courses/presentation/pages/course_list_page.dart';
 import 'features/courses/presentation/pages/course_detail_page.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/dashboard/presentation/pages/announcement_page.dart';
+import 'features/dashboard/presentation/pages/announcement_detail_page.dart';
 
 void main() {
   runApp(const LMSApp());
@@ -58,6 +59,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/announcement',
       builder: (context, state) => const AnnouncementPage(),
+    ),
+    GoRoute(
+      path: '/announcement-detail',
+      builder: (context, state) => const AnnouncementDetailPage(),
     ),
   ],
 );

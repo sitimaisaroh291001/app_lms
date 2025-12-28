@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 class AnnouncementPage extends StatelessWidget {
@@ -40,15 +41,18 @@ class AnnouncementPage extends StatelessWidget {
           final item = announcements[index];
           return InkWell(
             onTap: () {
-               // Placeholder for detail view
-               showDialog(
-                 context: context, 
-                 builder: (c) => AlertDialog(
-                   title: Text(item['title']!), 
-                   content: const Text('Detail pengumuman akan ditampilkan di sini.'),
-                   actions: [TextButton(onPressed: ()=>Navigator.pop(c), child: const Text('Tutup'))]
-                 )
-               );
+               if (item['title']!.contains('Maintenance Pra UAS Semester Genap')) {
+                 context.push('/announcement-detail');
+               } else {
+                 showDialog(
+                   context: context, 
+                   builder: (c) => AlertDialog(
+                     title: Text(item['title']!), 
+                     content: const Text('Detail pengumuman akan ditampilkan di sini.'),
+                     actions: [TextButton(onPressed: ()=>Navigator.pop(c), child: const Text('Tutup'))]
+                   )
+                 );
+               }
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

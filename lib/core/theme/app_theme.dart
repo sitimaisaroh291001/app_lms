@@ -21,7 +21,7 @@ class AppTheme {
         onSecondary: Colors.white,
         surface: Colors.white,
         onSurface: Colors.black87,
-        background: scaffoldBackgroundColor, // Legacy fallback
+
         error: const Color(0xFFD32F2F),
       ),
 

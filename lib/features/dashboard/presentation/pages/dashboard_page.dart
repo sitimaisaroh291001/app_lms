@@ -175,7 +175,9 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {}, 
+                        onPressed: () {
+                          context.push('/announcement');
+                        }, 
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           minimumSize: Size.zero,

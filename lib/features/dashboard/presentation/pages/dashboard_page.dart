@@ -62,30 +62,33 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFA00000), // Slightly darker red for badge
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white30),
-                        ),
-                        child: Row(
-                          children: [
-                            const Text(
-                              'MAHASISWA',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () => context.push('/profile'),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFA00000), // Slightly darker red for badge
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.white30),
+                          ),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'MAHASISWA',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            const CircleAvatar(
-                              radius: 12,
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.person, size: 20, color: Color(0xFFC00000)),
-                            ),
-                          ],
+                              const SizedBox(width: 8),
+                              const CircleAvatar(
+                                radius: 12,
+                                backgroundColor: Colors.white,
+                                child: Icon(Icons.person, size: 20, color: Color(0xFFC00000)),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

@@ -1,257 +1,412 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('CeLoe LMS'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          // Red Header Background
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 140, // Adjust height as needed
+            child: Container(
+              color: const Color(0xFFC00000), // Deep Red
+            ),
           ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: AppTheme.primaryColor),
-              accountName: Text('Mahasiswa Telkom'),
-              accountEmail: Text('mahasiswa@student.telkomuniversity.ac.id'),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 40, color: AppTheme.primaryColor),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: const Text('Dashboard'),
-              onTap: () => context.pop(),
-            ),
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text('My Courses'),
-              onTap: () {
-                context.push('/course-list');
-              },
-            ),
-             ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Profile'),
-              onTap: () {
-                 context.push('/profile');
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () => context.go('/login'),
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Welcome Section
-            const Text(
-              'Selamat Datang,',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const Text(
-              'Mahasiswa Telkom',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-
-            // Announcement Carousel / Banner
-            Container(
-              height: 150,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppTheme.primaryColor,
-                borderRadius: BorderRadius.circular(16),
-                gradient: LinearGradient(
-                  colors: [AppTheme.primaryColor, AppTheme.secondaryColor],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              padding: const EdgeInsets.all(16),
+          
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 16),
+                  
+                  // 1. Header Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Halo,',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'MAHASISWA TELKOM',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFA00000), // Slightly darker red for badge
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white30),
+                        ),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'MAHASISWA',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.person, size: 20, color: Color(0xFFC00000)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 24),
+                  
+                  // 2. Tugas Yang Akan Datang (Upcoming Task)
                   const Text(
-                    'Pengumuman Penting',
+                    'Tugas Yang Akan Datang',
                     style: TextStyle(
-                      color: Colors.white,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      color: Colors.black87,
                     ),
+                  ),
+                  const SizedBox(height: 12),
+                  
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFC00000), // Red Card
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'DESAIN ANTARMUKA & PENGALAMAN PENGGUNA',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Tugas 01 - UID Android Mobile Game',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'Waktu Pengumpulan',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 10,
+                          ),
+                        ),
+                         const Text(
+                          'Jumat 26 Februari, 23:59 WIB',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 24),
+                  
+                  // 3. Pengumuman Terakhir
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Pengumuman Terakhir',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {}, 
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          'Lihat Semua', 
+                          style: TextStyle(color: Colors.blue, fontSize: 12)
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Jadwal Ujian Akhir Semester Genap telah dirilis. Silakan cek di menu Akademik.',
-                    style: TextStyle(color: Colors.white, fontSize: 13),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    'Maintenance Pra UAS Semester Genap 2020/2021',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   ),
-                  const Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: AppTheme.primaryColor,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  const SizedBox(height: 12),
+                  // Banner Image Placeholder
+                  Container(
+                    height: 140,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    onPressed: () {},
-                    child: const Text('Lihat Detail', style: TextStyle(fontSize: 12)),
-                  )
+                    child: Stack(
+                      children: [
+                         Positioned(
+                           right: 0,
+                           bottom: 0,
+                           child: Icon(Icons.build_circle_outlined, size: 80, color: Colors.blue.withValues(alpha: 0.2)),
+                         ),
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.image, size: 40, color: Colors.grey),
+                              SizedBox(height: 8),
+                              Text('Banner Announcement', style: TextStyle(color: Colors.grey, fontSize: 10)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // 4. Progres Kelas
+                  const Text(
+                    'Progres Kelas',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Course Items
+                  _buildCourseProgressItem(
+                    context,
+                    'ui',
+                    const Color(0xFFFFD700), // Yellow
+                    const Color(0xFFE65100), // Orange
+                    'DESAIN ANTARMUKA & PENGALAMAN PENGGUNA',
+                    'D4SM-42-03 [ADY]',
+                    0.80,
+                  ),
+                  _buildCourseProgressItem(
+                    context,
+                    'pk',
+                    Colors.red,
+                    Colors.red[800]!,
+                    'KEWARGANEGARAAN',
+                    'D4SM-41-GAB1 [BBO], JUMAT 2',
+                    0.85,
+                  ),
+                   _buildCourseProgressItem(
+                    context,
+                    'so',
+                    Colors.blueGrey,
+                    Colors.blueGrey[800]!,
+                    'SISTEM OPERASI',
+                    'D4SM-44-02 [DD6]',
+                    0.50,
+                  ),
+                  const SizedBox(height: 100), // Bottom padding for FAB/Nav
                 ],
               ),
             ),
-
-            const SizedBox(height: 24),
-
-            // Quick Menu (Grid)
-            const Text(
-              'Menu Cepat',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+          boxShadow: [
+             BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
             ),
-            const SizedBox(height: 16),
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 3, // 3 columns
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              children: [
-                _buildMenuCard(Icons.calendar_today, 'Jadwal', Colors.blue),
-                _buildMenuCard(Icons.book, 'Mata Kuliah', Colors.orange),
-                _buildMenuCard(Icons.assignment, 'Tugas', Colors.green),
-                _buildMenuCard(Icons.grade, 'Nilai', Colors.purple),
-                _buildMenuCard(Icons.library_books, 'Perpustakaan', Colors.teal),
-                _buildMenuCard(Icons.help, 'Bantuan', Colors.red),
-              ],
-            ),
-             const SizedBox(height: 24),
-             
-             // Recent Courses
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Kursus Terakhir',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                 TextButton(onPressed: (){}, child: const Text("Lihat Semua"))
-              ]
-            ),
-             const SizedBox(height: 8),
-             _buildCourseCard("Pemrograman Mobile", "IF-40-01", 0.7),
-             const SizedBox(height: 12),
-             _buildCourseCard("Desain UX", "IF-40-02", 0.4),
-
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-         selectedItemColor: AppTheme.primaryColor,
-         unselectedItemColor: Colors.grey,
-         showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Courses'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          // Handle navigation
-        },
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30), 
+            topRight: Radius.circular(30),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            backgroundColor: const Color(0xFFBE1E2D), // Primary Red
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.white.withValues(alpha: 0.6),
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+              if (index == 1) context.push('/course-list');
+              if (index == 2) context.push('/profile');
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_filled),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.school),
+                label: 'Kelas Saya',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile', // Request said "Profile", UI might imply Notifikasi, keeping Profile as per request
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildMenuCard(IconData icon, String label, Color color) {
+  Widget _buildCourseProgressItem(
+    BuildContext context, 
+    String iconTag, 
+    Color color1, 
+    Color color2, 
+    String title, 
+    String code, 
+    double progress
+  ) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 28),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildCourseCard(String title, String code, double progress) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
+      margin: const EdgeInsets.only(bottom: 16),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Container(
-             width: 50,
-             height: 50,
-             decoration: BoxDecoration(
-               color: Colors.grey[200],
-               borderRadius: BorderRadius.circular(8),
-             ),
-             child: const Icon(Icons.image, color: Colors.grey),
-           ),
-           const SizedBox(width: 12),
-           Expanded(
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                 Text(code, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                 const SizedBox(height: 8),
-                 LinearProgressIndicator(value: progress, color: AppTheme.primaryColor, backgroundColor: Colors.grey[200], minHeight: 4,),
-               ],
-             )
-           )
+          // Icon Box
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [color1, color2],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(4), // Slightly rounded square
+            ),
+            child: Center(
+              child: Text(
+                iconTag.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          // Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    height: 1.2,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  code,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Progress Bar
+                Row(
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: progress,
+                          minHeight: 8,
+                          backgroundColor: Colors.grey[300],
+                          color: const Color(0xFFC00000), // Red Progress
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                 Text(
+                   '${(progress * 100).toInt()}% Selesai',
+                   style: const TextStyle(fontSize: 10, color: Colors.grey),
+                 ),
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -121,16 +121,16 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _usernameController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Email 365 tidak boleh kosong';
+                                return 'Email tidak boleh kosong';
                               }
-                              if (!value.contains('@365.telkomuniversity.ac.id')) {
-                                return 'Gunakan domain @365.telkomuniversity.ac.id';
+                              if (!value.contains('@')) {
+                                return 'Format email tidak valid';
                               }
                               return null;
                             },
                             decoration: const InputDecoration(
-                              labelText: 'Email 365',
-                              hintText: 'username@365.telkomuniversity.ac.id',
+                              labelText: 'Email',
+                              hintText: 'masukkan email anda',
                               floatingLabelBehavior: FloatingLabelBehavior.auto,
                               // Using Underline border as suggested by design analysis
                               border: UnderlineInputBorder(),

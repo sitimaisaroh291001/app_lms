@@ -22,7 +22,7 @@ void main() {
 
     // Verify that the Login page is displayed.
     expect(find.text('Login'), findsAtLeastNWidgets(1)); // Header Title
-    expect(find.text('Email 365'), findsOneWidget);
+    expect(find.text('Email'), findsOneWidget);
     expect(find.text('Password'), findsOneWidget);
     expect(find.text('Log In'), findsOneWidget); // Button Text
     

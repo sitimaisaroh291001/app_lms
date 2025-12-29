@@ -174,7 +174,7 @@ class _TasksTab extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/images/empty_state_task.png',
+            'assets/images/task_empty.png',
             height: 200, // Adjust height as needed to match design proportionality
             fit: BoxFit.contain,
           ),

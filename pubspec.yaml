@@ -69,7 +69,7 @@ flutter:
     - assets/images/telanaipura_building.png
     - assets/images/splash_logo.png
     - assets/images/splash_logo_ascend.jpg
-    - assets/images/empty_state_task.png
+    - assets/images/task_empty.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

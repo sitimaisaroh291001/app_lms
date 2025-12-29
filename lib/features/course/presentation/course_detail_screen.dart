@@ -52,7 +52,8 @@ class CourseDetailScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    // ignore: deprecated_member_use
+                    color: Colors.black.withOpacity(0.05),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -140,7 +141,8 @@ class CourseDetailScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                // ignore: deprecated_member_use
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -253,7 +255,8 @@ class CourseDetailScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                // ignore: deprecated_member_use
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),

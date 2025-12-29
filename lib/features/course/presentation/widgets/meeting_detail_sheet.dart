@@ -173,9 +173,11 @@ class _TasksTab extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // If you have the image asset, use it here. 
-          // Since I don't have the "girl falling" illustration, I'll use a placeholder icon.
-          Icon(Icons.image_outlined, size: 120, color: Colors.grey[300]),
+          Image.asset(
+            'assets/images/empty_state_task.png',
+            height: 200, // Adjust height as needed to match design proportionality
+            fit: BoxFit.contain,
+          ),
           const SizedBox(height: 16),
           const Text(
             "Tidak Ada Tugas Dan Kuis Hari Ini",

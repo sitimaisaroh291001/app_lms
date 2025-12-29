@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 
@@ -213,7 +214,13 @@ class _TasksTab extends StatelessWidget {
         final task = tasks[index];
         bool isDone = task['isDone'] ?? false;
         
-        return Container(
+        return GestureDetector(
+          onTap: () {
+             if (task['title'].toString().contains('Quiz')) {
+               context.push('/quiz-detail');
+             }
+          },
+          child: Container(
           padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
             color: Colors.white,
@@ -282,6 +289,7 @@ class _TasksTab extends StatelessWidget {
             ],
           ),
         );
+        ),
       },
     );
   }

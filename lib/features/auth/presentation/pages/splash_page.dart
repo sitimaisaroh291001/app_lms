@@ -40,7 +40,7 @@ class _SplashPageState extends State<SplashPage> {
                 width: 250,
                 fit: BoxFit.contain,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8),
               const Text(
                 'Learning Management System',
                 style: TextStyle(

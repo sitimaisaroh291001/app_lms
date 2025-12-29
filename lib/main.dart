@@ -7,6 +7,7 @@ import 'features/auth/presentation/pages/splash_page.dart';
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 import 'features/courses/presentation/pages/course_list_page.dart';
 import 'features/courses/presentation/pages/course_detail_page.dart';
+import 'features/course/presentation/course_detail_screen.dart'; // Import New Screen
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/dashboard/presentation/pages/announcement_page.dart';
 import 'features/dashboard/presentation/pages/announcement_detail_page.dart';
@@ -66,6 +67,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/course-detail',
       builder: (context, state) => const CourseDetailPage(),
+    ),
+    GoRoute(
+      path: '/course-detail-tabs',
+      builder: (context, state) => const CourseDetailScreen(), // New Screen
     ),
     GoRoute(
       path: '/profile',

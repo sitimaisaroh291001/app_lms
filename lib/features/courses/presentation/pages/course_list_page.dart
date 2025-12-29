@@ -134,7 +134,13 @@ class _CourseListPageState extends State<CourseListPage> {
         itemBuilder: (context, index) {
           final course = courses[index];
           return GestureDetector(
-            onTap: () => context.push('/course-detail'),
+            onTap: () {
+              if ((course['title'] as String).contains('DESAIN ANTARMUKA')) {
+                context.push('/course-detail-tabs');
+              } else {
+                context.push('/course-detail');
+              }
+            },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

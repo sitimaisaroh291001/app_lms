@@ -288,8 +288,8 @@ class _TasksTab extends StatelessWidget {
               ),
             ],
           ),
+          ),
         );
-        ),
       },
     );
   }

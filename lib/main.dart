@@ -13,6 +13,7 @@ import 'features/dashboard/presentation/pages/announcement_page.dart';
 import 'features/dashboard/presentation/pages/announcement_detail_page.dart';
 import 'features/notification/presentation/pages/notification_page.dart';
 import 'features/course/presentation/quiz_detail_screen.dart';
+import 'features/course/presentation/quiz_attempt_screen.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/user_provider.dart';
 
@@ -72,6 +73,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/quiz-detail',
       builder: (context, state) => const QuizDetailScreen(), // New Screen
+    ),
+    GoRoute(
+      path: '/quiz-attempt',
+      builder: (context, state) => const QuizAttemptScreen(), // New Screen
     ),
     GoRoute(
       path: '/course-detail-tabs',

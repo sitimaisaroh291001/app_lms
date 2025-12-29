@@ -145,7 +145,7 @@ class QuizDetailScreen extends StatelessWidget {
                 children: [
                    ElevatedButton(
                      onPressed: () {
-                       // Action
+                       context.push('/quiz-attempt');
                      }, 
                      style: ElevatedButton.styleFrom(
                        backgroundColor: const Color(0xFFF5F5F5),

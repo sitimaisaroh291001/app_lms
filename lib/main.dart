@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/auth/presentation/pages/register_page.dart';
+import 'features/auth/presentation/pages/splash_page.dart';
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 import 'features/courses/presentation/pages/course_list_page.dart';
 import 'features/courses/presentation/pages/course_detail_page.dart';
@@ -30,7 +31,7 @@ class LMSApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'LMS App',
+      title: 'ASCEND',
       theme: AppTheme.lightTheme, // Apply the custom theme
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
@@ -40,8 +41,12 @@ class LMSApp extends StatelessWidget {
 
 // Basic Router Setup - Will be expanded as features are implemented
 final GoRouter _router = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/',
   routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const SplashPage(),
+    ),
     GoRoute(
       path: '/login',
       builder: (context, state) => const LoginPage(),

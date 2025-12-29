@@ -48,12 +48,13 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: Alignment.bottomCenter,
                     children: [
                       // Placeholder for Building Image
-                      Container(
+                      SizedBox(
                         height: 300,
                         width: double.infinity,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.business, size: 100, color: Colors.white),
-                        // In real app, use: Image.asset('assets/images/building.png', fit: BoxFit.cover),
+                        child: Image.asset(
+                          'assets/images/telanaipura_building.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       // White Curve overlaid at the bottom
                       Container(

@@ -14,6 +14,7 @@ import 'features/dashboard/presentation/pages/announcement_detail_page.dart';
 import 'features/notification/presentation/pages/notification_page.dart';
 import 'features/course/presentation/quiz_detail_screen.dart';
 import 'features/course/presentation/quiz_attempt_screen.dart';
+import 'features/course/presentation/quiz_review_screen.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/user_provider.dart';
 
@@ -97,6 +98,13 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/notification',
       builder: (context, state) => const NotificationPage(),
+    ),
+    GoRoute(
+      path: '/quiz-review',
+      builder: (context, state) {
+        final questions = state.extra as List<Map<String, dynamic>>? ?? [];
+        return QuizReviewScreen(questions: questions);
+      }, 
     ),
   ],
 );

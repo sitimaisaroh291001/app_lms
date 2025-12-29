@@ -249,9 +249,20 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
                   )
                 else
                    ElevatedButton(
-                    onPressed: () {
-                      // Finish quiz
-                      context.pop(); // Returns to detail
+                    onPressed: () async {
+                      // Finish quiz -> Go to Review
+                      final result = await context.push<Map<String, dynamic>>('/quiz-review', extra: _questions);
+                      
+                      if (result != null) {
+                        if (result['action'] == 'edit') {
+                           setState(() {
+                             _currentIndex = result['index'];
+                           });
+                        } else if (result['action'] == 'submit') {
+                           // Final Submit
+                           if (mounted) context.pop();
+                        }
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2ECC71), // Green

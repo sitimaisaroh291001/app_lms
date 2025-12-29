@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:file_picker/file_picker.dart';
+import '../../../../core/services/user_preferences.dart';
+import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,16 +13,85 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String _userName = 'DANDY CANDRA PRATAMA';
+  String _email = 'dandycandra@365.telkomuniversity.ac.id';
+  String? _profileImagePath;
+  final _nameFirstController = TextEditingController();
+  final _nameLastController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _countryController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final name = await UserPreferences.getName();
+    final email = await UserPreferences.getEmail();
+    final imagePath = await UserPreferences.getProfileImage();
+    
+    setState(() {
+      if (name != null) {
+        _userName = name;
+        // Split name for edit fields if possible, or just put full name in first
+        _nameFirstController.text = name;
+      }
+      if (email != null) {
+        _email = email;
+        _emailController.text = email;
+      }
+      _profileImagePath = imagePath;
+    });
+  }
+
+  Future<void> _pickImage() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result != null && result.files.single.path != null) {
+      final path = result.files.single.path!;
+      
+      // Verify file exists
+      if (await File(path).exists()) {
+        await UserPreferences.saveProfileImage(path);
+        setState(() {
+          _profileImagePath = path;
+        });
+      }
+    }
+  }
+
+  Future<void> _saveProfile() async {
+    // Combine names or just use first name field as full name for now
+    final newName = _nameFirstController.text; 
+    final newEmail = _emailController.text;
+    
+    await UserPreferences.saveName(newName);
+    await UserPreferences.saveEmail(newEmail);
+    // Suggestion: could save other fields too if UserPreferences supported them
+    
+    setState(() {
+      _userName = newName;
+      _email = newEmail;
+    });
+    
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profil berhasil disimpan')),
+      );
+    }
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _nameFirstController.dispose();
+    _nameLastController.dispose();
+    _emailController.dispose();
+    _countryController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -44,14 +116,39 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             ),
             
             // Profile Header
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'), // Placeholder
-              backgroundColor: Colors.white,
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  backgroundImage: _profileImagePath != null
+                      ? FileImage(File(_profileImagePath!))
+                      : null,
+                   // If no image, show default or placeholder
+                  child: _profileImagePath == null
+                      ? const Icon(Icons.person, size: 50, color: Color(0xFFC00000))
+                      : null,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.camera_alt, color: Color(0xFFBE1E2D), size: 20),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
-            const Text(
-              'DANDY CANDRA PRATAMA',
+            Text(
+              _userName,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -172,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          _buildInfoItem('Email address', 'dandycandra@365.telkomuniversity.ac.id'),
+          _buildInfoItem('Email address', _email),
           _buildInfoItem('Program Studi', 'D4 Teknologi Rekayasa Multimedia'),
           _buildInfoItem('Fakultas', 'FIT'),
           
@@ -273,11 +370,11 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           _buildTextField('Nama Pertama'),
-           _buildTextField('Nama Terakhir'),
-           _buildTextField('E-mail Address'),
-           _buildTextField('Negara'),
-           _buildTextField('Deskripsi', maxLines: 5),
+           _buildTextField('Nama Pertama', controller: _nameFirstController),
+           _buildTextField('Nama Terakhir', controller: _nameLastController),
+           _buildTextField('E-mail Address', controller: _emailController),
+           _buildTextField('Negara', controller: _countryController),
+           _buildTextField('Deskripsi', maxLines: 5, controller: _descriptionController),
            const SizedBox(height: 24),
            Align(
              alignment: Alignment.centerRight,
@@ -287,7 +384,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                  foregroundColor: Colors.black,
                  elevation: 0,
                ),
-               onPressed: (){},
+               onPressed: _saveProfile,
                child: const Text('Simpan'),
              ),
            )
@@ -296,7 +393,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     );
   }
   
-  Widget _buildTextField(String label, {int maxLines = 1}) {
+  Widget _buildTextField(String label, {int maxLines = 1, TextEditingController? controller}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -305,6 +402,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           TextField(
+            controller: controller,
             maxLines: maxLines,
             decoration: InputDecoration(
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Colors.grey)),

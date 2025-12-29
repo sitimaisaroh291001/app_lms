@@ -10,9 +10,18 @@ import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/dashboard/presentation/pages/announcement_page.dart';
 import 'features/dashboard/presentation/pages/announcement_detail_page.dart';
 import 'features/notification/presentation/pages/notification_page.dart';
+import 'package:provider/provider.dart';
+import 'core/providers/user_provider.dart';
 
 void main() {
-  runApp(const LMSApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: const LMSApp(),
+    ),
+  );
 }
 
 class LMSApp extends StatelessWidget {

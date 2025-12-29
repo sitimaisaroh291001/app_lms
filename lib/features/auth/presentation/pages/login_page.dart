@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/services/user_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -197,9 +198,17 @@ class _LoginPageState extends State<LoginPage> {
                                 shadowColor: Colors.black26,
 
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  context.go('/dashboard');
+                                  // Save user data
+                                  final email = _usernameController.text;
+                                  final name = email.split('@')[0]; // Simple extraction
+                                  await UserPreferences.saveName(name.toUpperCase());
+                                  await UserPreferences.saveEmail(email);
+
+                                  if (context.mounted) {
+                                    context.go('/dashboard');
+                                  }
                                 }
                               },
                               child: const Text(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:io';
 import '../../../../core/presentation/widgets/course_thumbnail.dart';
+import '../../../../core/services/user_preferences.dart';
 
 
 
@@ -13,6 +15,23 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
+  String _userName = 'MAHASISWA TELKOM';
+  String? _profileImagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final name = await UserPreferences.getName();
+    final imagePath = await UserPreferences.getProfileImage();
+    setState(() {
+      if (name != null) _userName = name;
+      _profileImagePath = imagePath;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +73,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          const Text(
-                            'MAHASISWA TELKOM',
-                            style: TextStyle(
+                          Text(
+                            _userName,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -65,7 +84,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         ],
                       ),
                       GestureDetector(
-                        onTap: () => context.push('/profile'),
+                        onTap: () async {
+                           await context.push('/profile');
+                           // Refresh data when returning from profile
+                           _loadUserData();
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
@@ -84,10 +107,15 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const CircleAvatar(
+                              CircleAvatar(
                                 radius: 12,
                                 backgroundColor: Colors.white,
-                                child: Icon(Icons.person, size: 20, color: Color(0xFFC00000)),
+                                backgroundImage: _profileImagePath != null
+                                    ? FileImage(File(_profileImagePath!))
+                                    : null,
+                                child: _profileImagePath == null
+                                    ? const Icon(Icons.person, size: 20, color: Color(0xFFC00000))
+                                    : null,
                               ),
                             ],
                           ),
@@ -351,13 +379,16 @@ class _DashboardPageState extends State<DashboardPage> {
             unselectedItemColor: Colors.white.withValues(alpha: 0.6),
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,
-            onTap: (index) {
+            onTap: (index) async {
               setState(() {
                 _selectedIndex = index;
               });
               if (index == 1) context.push('/course-list');
               if (index == 2) context.push('/notification');
-              if (index == 3) context.push('/profile');
+              if (index == 3) {
+                 await context.push('/profile');
+                 _loadUserData();
+              }
             },
             items: const [
               BottomNavigationBarItem(

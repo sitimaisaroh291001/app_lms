@@ -1,8 +1,21 @@
 
 import 'package:flutter/material.dart';
 
+
+
 class MeetingDetailSheet extends StatelessWidget {
-  const MeetingDetailSheet({super.key});
+  final String title;
+  final String description;
+  final List<Map<String, dynamic>> attachments;
+  final List<Map<String, dynamic>> tasks;
+
+  const MeetingDetailSheet({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.attachments,
+    required this.tasks,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +49,18 @@ class MeetingDetailSheet extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
-                          "Pengantar User Interface Design",
-                          style: TextStyle(
+                          title,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.black87,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 16),
-                        Text(
+                        const SizedBox(height: 16),
+                        const Text(
                           "Deskripsi",
                           style: TextStyle(
                             fontSize: 14,
@@ -55,10 +68,10 @@ class MeetingDetailSheet extends StatelessWidget {
                             color: Colors.black87,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
-                          "Antarmuka yang dibangun harus memperhatikan prinsip-prinsip desain yang ada. Hal ini diharapkan agar antarmuka yang dibangun bukan hanya menarik secara visual tetapi dengan memperhatikan kaidah-kaidah prinsip desain diharapkan akan mendukung pengguna dalam menggunakan produk secara baik. Pelajaran mengenai prinsip UID ini sudah pernah diajarkan dalam mata kuliah Implementasi Desain Antarmuka Pengguna tetap pada matakuliah ini akan direview kembali sehingga dapat menjadi bekal saat memasukki materi mengenai User Experience",
-                          style: TextStyle(
+                          description,
+                          style: const TextStyle(
                             fontSize: 12,
                             height: 1.5,
                             color: Colors.black87,
@@ -84,8 +97,8 @@ class MeetingDetailSheet extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        _AttachmentsTab(),
-                        _TasksTab(),
+                        _AttachmentsTab(attachments: attachments),
+                        _TasksTab(tasks: tasks),
                       ],
                     ),
                   ),
@@ -100,20 +113,16 @@ class MeetingDetailSheet extends StatelessWidget {
 }
 
 class _AttachmentsTab extends StatelessWidget {
-  const _AttachmentsTab();
+  final List<Map<String, dynamic>> attachments;
+  
+  const _AttachmentsTab({required this.attachments});
 
   @override
   Widget build(BuildContext context) {
-    final attachments = [
-      {'title': 'Zoom Meeting Syncronous', 'type': 'link'},
-      {'title': 'Pengantar User Interface Design', 'type': 'pdf'},
-      {'title': 'Empat Teori Dasar Antarmuka Pengguna', 'type': 'pdf'},
-      {'title': 'Empat Teori Dasar Antarmuka Pengguna', 'type': 'pdf'},
-      {'title': 'User Interface Design for Beginner', 'type': 'video'},
-      {'title': '20 Prinsip Desain', 'type': 'link'},
-      {'title': 'Best Practice UI Design', 'type': 'link'},
-    ];
-
+    if (attachments.isEmpty) {
+        return const Center(child: Text("Tidak ada lampiran"));
+    }
+  
     return ListView.separated(
       padding: const EdgeInsets.all(24),
       itemCount: attachments.length,
@@ -121,7 +130,9 @@ class _AttachmentsTab extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = attachments[index];
         IconData icon;
-        switch (item['type']) {
+        // Basic icon mapping based on type logic if present, or generic file
+        String type = item['type'] ?? 'file';
+        switch (type) {
           case 'link':
             icon = Icons.link;
             break;
@@ -165,29 +176,113 @@ class _AttachmentsTab extends StatelessWidget {
 }
 
 class _TasksTab extends StatelessWidget {
-  const _TasksTab();
+  final List<Map<String, dynamic>> tasks;
+
+  const _TasksTab({required this.tasks});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/task_empty.png',
-            height: 200, // Adjust height as needed to match design proportionality
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            "Tidak Ada Tugas Dan Kuis Hari Ini",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+    if (tasks.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/task_empty.png',
+              height: 200, 
+              fit: BoxFit.contain,
             ),
+            const SizedBox(height: 16),
+            const Text(
+              "Tidak Ada Tugas Dan Kuis Hari Ini",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: tasks.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        final task = tasks[index];
+        bool isDone = task['isDone'] ?? false;
+        
+        return Container(
+          padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+            boxShadow: [
+              BoxShadow(
+                // ignore: deprecated_member_use
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Left Icon Column
+              Column(
+                children: [
+                   Icon(
+                     task['icon'] ?? Icons.assignment, // Default icon
+                     size: 32,
+                     color: Colors.black87,
+                   ),
+                ],
+              ),
+              const SizedBox(width: 16),
+              // Content Column
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Expanded(
+                           child: Text(
+                             task['title'] ?? 'Tugas',
+                             style: const TextStyle(
+                               fontWeight: FontWeight.bold,
+                               fontSize: 14,
+                             ),
+                           ),
+                         ),
+                         Icon(
+                           Icons.check_circle,
+                           color: isDone ? const Color(0xFF2ECC71) : Colors.grey[300],
+                           size: 24,
+                         ),
+                       ],
+                     ),
+                     const SizedBox(height: 8),
+                     Text(
+                       task['description'] ?? '',
+                       style: const TextStyle(fontSize: 12, color: Colors.black87),
+                     ),
+                     const SizedBox(height: 8),
+                      Text(
+                       task['deadline'] ?? '',
+                       style: const TextStyle(fontSize: 10, color: Colors.grey),
+                     ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

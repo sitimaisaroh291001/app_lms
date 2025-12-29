@@ -90,18 +90,54 @@ class CourseDetailScreen extends StatelessWidget {
         "pertemuan": "Pertemuan 1",
         "title": "01 - Pengantar User Interface Design",
         "desc": "3 URLs, 2 Files, 3 Interactive Content",
-        "isDone": true, // Grey check if false? No, design says green=done, grey=not done.
-        // Image shows grey check for completed items?
-        // User request: "Hijau = selesai, Abu-abu = belum"
-        // But in image 1 (materi), checks are grey/silver?
-        // Wait, user text says: "Hijau = selesai, Abu-abu = belum"
-        // I will follow text instructions.
+        "isDone": true,
+        "detail": {
+           "title": "Pengantar User Interface Design",
+           "description": "Antarmuka yang dibangun harus memperhatikan prinsip-prinsip desain yang ada. Hal ini diharapkan agar antarmuka yang dibangun bukan hanya menarik secara visual tetapi dengan memperhatikan kaidah-kaidah prinsip desain diharapkan akan mendukung pengguna dalam menggunakan produk secara baik. Pelajaran mengenai prinsip UID ini sudah pernah diajarkan dalam mata kuliah Implementasi Desain Antarmuka Pengguna tetap pada matakuliah ini akan direview kembali sehingga dapat menjadi bekal saat memasukki materi mengenai User Experience",
+           "attachments": [
+              {'title': 'Zoom Meeting Syncronous', 'type': 'link'},
+              {'title': 'Pengantar User Interface Design', 'type': 'pdf'},
+              {'title': 'Empat Teori Dasar Antarmuka Pengguna', 'type': 'pdf'},
+              {'title': 'Empat Teori Dasar Antarmuka Pengguna', 'type': 'pdf'},
+              {'title': 'User Interface Design for Beginner', 'type': 'video'},
+              {'title': '20 Prinsip Desain', 'type': 'link'},
+              {'title': 'Best Practice UI Design', 'type': 'link'},
+           ],
+           "tasks": <Map<String, dynamic>>[], // Empty tasks
+        }
       },
       {
         "pertemuan": "Pertemuan 2",
         "title": "02 - Konsep User Interface Design",
         "desc": "2 URLs, 1 Kuis, 3 Files, 1 Tugas",
         "isDone": true,
+        "detail": {
+           "title": "Konsep User Interface Design",
+           "description": "Konsep dasar User Interface Design akan dipelajari bagaimana membangun sebuah Interaction Design pada antarmuka. Interaction ini sangat penting untuk aplikasi berkomunikasi dengan pengguna. Lalu dipelajari juga poin-poin penting pada interaction design seperti visibility, feedback, limitation, consistency dan affordance. Dan terakhir materi conceptual dan perceptual design interaction akan memberikan gambaran bagaimana bentuk dari Interaction.",
+           "attachments": [
+              {'title': 'Zoom Meeting Syncronous', 'type': 'link'},
+              {'title': 'Elemen-elemen Antarmuka Pengguna', 'type': 'pdf'},
+              {'title': 'UID Guidelines and Principles', 'type': 'pdf'},
+              {'title': 'User Profile', 'type': 'pdf'},
+              {'title': 'Principles of User Interface DesignURL', 'type': 'link'},
+           ],
+           "tasks": [
+             {
+               "title": "Quiz Review 01",
+               "description": "Silahkan kerjakan kuis ini dalam waktu 15 menit sebagai nilai pertama komponen kuis. Jangan lupa klik tombol Submit Answer setelah menjawab seluruh pertanyaan.\nKerjakan sebelum hari Jum'at, 26 Februari 2021 jam 23:59 WIB.",
+               "deadline": "",
+               "icon": Icons.chat_bubble_outline,
+               "isDone": true,
+             },
+             {
+               "title": "Tugas 01 - UID Android Mobile Game",
+               "description": "1. Buatlah desain tampilan (antarmuka) pada aplikasi mobile game FPS (First Person Shooter) yang akan menjadi tugas pada mata kuliah Pemrograman Aplikasi Permainan.\n2. Desain yang dibuat harus melingkupi seluruh tampilan pada aplikasi/game, dari pertama kali aplikasi ...........",
+               "deadline": "",
+               "icon": Icons.assignment_outlined,
+               "isDone": false, // Grey check
+             }
+           ]
+        }
       },
       {
         "pertemuan": "Pertemuan 3",
@@ -138,16 +174,20 @@ class CourseDetailScreen extends StatelessWidget {
         final isDone = item['isDone'] as bool;
         return GestureDetector(
           onTap: () {
-            // Only show detail for the first item for now as per instructions/design matching
-            // Or for all items. Since design only shows one specific detail view, 
-            // I'll enable it for "Pengantar User Interface Design" specifically or just all for demo.
-            // Let's enable for all but display static content as requested.
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true, // Important for full height
-              backgroundColor: Colors.transparent,
-              builder: (context) => const MeetingDetailSheet(),
-            );
+            if (item.containsKey('detail')) {
+                 final detail = item['detail'] as Map<String, dynamic>;
+                 showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true, 
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => MeetingDetailSheet(
+                    title: detail['title'],
+                    description: detail['description'],
+                    attachments: detail['attachments'],
+                    tasks: detail['tasks'],
+                  ),
+                );
+            }
           },
           child: Container(
             decoration: BoxDecoration(

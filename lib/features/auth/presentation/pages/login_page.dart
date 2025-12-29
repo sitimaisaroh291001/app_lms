@@ -240,30 +240,12 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
 
-                          const Spacer(),
+
                           
-                          // Register Link
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text("Belum punya akun? ", style: TextStyle(color: Colors.grey)),
-                                  GestureDetector(
-                                    onTap: () => context.push('/register'),
-                                    child: const Text(
-                                      'Register',
-                                      style: TextStyle(
-                                        color: AppTheme.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          // Spacer to push content up if needed, but since we are moving the register button out, 
+                          // we might just need to ensure the form doesn't overlap too much.
+                          const Spacer(),
+                          const SizedBox(height: 80), // Space for the floating register button
                         ],
                       ),
                     ),
@@ -281,6 +263,50 @@ class _LoginPageState extends State<LoginPage> {
                   child: CustomPaint(
                     size: Size(MediaQuery.of(context).size.width, 80),
                     painter: BottomWavePainter(),
+                  ),
+                ),
+              ),
+
+              // Register Link (Floating on top)
+              Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFC00000), // Deep Red
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                      border: Border.all(color: Colors.white, width: 2), // Added white border for better contrast against red wave
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Belum punya akun? ", style: TextStyle(color: Colors.white)),
+                        GestureDetector(
+                          onTap: () => context.push('/register'),
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

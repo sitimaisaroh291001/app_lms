@@ -225,6 +225,8 @@ class _TasksTab extends StatelessWidget {
           onTap: () {
              if (task['title'].toString().contains('Quiz')) {
                context.push('/quiz-detail');
+             } else if (task['title'].toString().contains('Tugas 01')) {
+                context.push('/task-detail');
              }
           },
           child: Container(

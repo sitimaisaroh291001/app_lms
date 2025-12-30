@@ -17,6 +17,7 @@ import 'features/course/presentation/quiz_attempt_screen.dart';
 import 'features/course/presentation/quiz_review_screen.dart';
 import 'features/course/presentation/material_detail_screen.dart';
 import 'features/course/presentation/video_detail_screen.dart';
+import 'features/course/presentation/task_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/user_provider.dart';
 
@@ -115,6 +116,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/video-detail',
       builder: (context, state) => const VideoDetailScreen(),
+    ),
+    GoRoute(
+      path: '/task-detail',
+      builder: (context, state) => const TaskDetailScreen(),
     ),
   ],
 );

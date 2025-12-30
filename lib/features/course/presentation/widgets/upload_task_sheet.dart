@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-class UploadTaskSheet extends StatelessWidget {
+import 'package:file_picker/file_picker.dart';
+
+class UploadTaskSheet extends StatefulWidget {
   const UploadTaskSheet({super.key});
+
+  @override
+  State<UploadTaskSheet> createState() => _UploadTaskSheetState();
+}
+
+class _UploadTaskSheetState extends State<UploadTaskSheet> {
+  String? _selectedFileName;
+
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        _selectedFileName = result.files.single.name;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,17 +91,38 @@ class UploadTaskSheet extends StatelessWidget {
                      width: double.infinity,
                      height: 200,
                      alignment: Alignment.center,
-                     child: Column(
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       children: [
-                         Icon(Icons.cloud_upload_outlined, size: 80, color: Colors.blue[400]),
-                         const SizedBox(height: 16),
-                         const Text(
-                           "File yang akan di upload akan tampil di sini",
-                           style: TextStyle(color: Colors.black54),
+                     child: _selectedFileName == null 
+                       ? Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Icon(Icons.cloud_upload_outlined, size: 80, color: Colors.blue[400]),
+                             const SizedBox(height: 16),
+                             const Text(
+                               "File yang akan di upload akan tampil di sini",
+                               style: TextStyle(color: Colors.black54),
+                             ),
+                           ],
+                         )
+                       : Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Icon(Icons.description, size: 80, color: Colors.blue[400]),
+                             const SizedBox(height: 16),
+                             Text(
+                               _selectedFileName!,
+                               style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                               textAlign: TextAlign.center,
+                             ),
+                             TextButton(
+                               onPressed: () {
+                                 setState(() {
+                                   _selectedFileName = null;
+                                 });
+                               }, 
+                               child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+                             )
+                           ],
                          ),
-                       ],
-                     ),
                    ),
                  ),
                  
@@ -94,7 +134,7 @@ class UploadTaskSheet extends StatelessWidget {
                      SizedBox(
                        width: 150,
                        child: ElevatedButton(
-                         onPressed: () {},
+                         onPressed: _pickFile,
                          style: ElevatedButton.styleFrom(
                            backgroundColor: Colors.grey[100],
                            foregroundColor: Colors.black87,
@@ -108,7 +148,14 @@ class UploadTaskSheet extends StatelessWidget {
                      SizedBox(
                        width: 150,
                        child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_selectedFileName != null) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('File $_selectedFileName berhasil disimpan!')),
+                              );
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                            backgroundColor: Colors.grey[100],
                            foregroundColor: Colors.black87,

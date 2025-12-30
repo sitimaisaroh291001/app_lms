@@ -104,7 +104,7 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: isActive ? const Color(0xFF2ECC71) : Colors.transparent, // Active = Green
+                      color: (isActive || isAnswered) ? const Color(0xFF2ECC71) : Colors.transparent, // Active or Answered = Green
                       border: Border.all(
                         color: (isActive || isAnswered) ? const Color(0xFF2ECC71) : Colors.grey,
                       ),
@@ -113,7 +113,7 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
                       child: Text(
                         "${index + 1}",
                         style: TextStyle(
-                          color: isActive ? Colors.white : Colors.black,
+                          color: (isActive || isAnswered) ? Colors.white : Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
                         ),

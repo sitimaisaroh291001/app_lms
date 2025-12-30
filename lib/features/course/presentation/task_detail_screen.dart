@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/upload_task_sheet.dart';
 
 class TaskDetailScreen extends StatelessWidget {
   const TaskDetailScreen({super.key});
@@ -33,7 +34,14 @@ class TaskDetailScreen extends StatelessWidget {
              const SizedBox(height: 32),
              Center(
                child: ElevatedButton(
-                 onPressed: () {},
+                 onPressed: () {
+                   showModalBottomSheet(
+                     context: context,
+                     isScrollControlled: true,
+                     backgroundColor: Colors.transparent,
+                     builder: (context) => const UploadTaskSheet(),
+                   );
+                 },
                  style: ElevatedButton.styleFrom(
                    backgroundColor: Colors.grey[200],
                    foregroundColor: Colors.black87,

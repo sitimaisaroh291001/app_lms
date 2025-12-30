@@ -133,7 +133,7 @@ class _AttachmentsTab extends StatelessWidget {
         IconData icon;
         // Basic icon mapping based on type logic if present, or generic file
         String type = item['type'] ?? 'file';
-        switch (type) {
+            switch (type) {
           case 'link':
             icon = Icons.link;
             break;
@@ -172,6 +172,8 @@ class _AttachmentsTab extends StatelessWidget {
             onTap: () {
                if (item['title'] == 'Pengantar User Interface Design') {
                   context.push('/material-detail');
+               } else if (item['title']!.contains('User Interface Design for Beginner')) {
+                  context.push('/video-detail');
                }
             },
           ),

@@ -74,6 +74,10 @@ flutter:
     - assets/images/slide_ui_2.png
     - assets/images/slide_ui_3.png
     - assets/images/slide_ui_4.png
+    - assets/images/video_thumbnail_ui_design.png
+    - assets/images/video_thumbnail_interaction.png
+    - assets/images/video_thumbnail_pengantar.png
+    - assets/images/video_thumbnail_figma.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

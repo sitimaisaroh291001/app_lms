@@ -169,6 +169,11 @@ class _AttachmentsTab extends StatelessWidget {
             ),
             trailing: const Icon(Icons.check_circle, color: Color(0xFF2ECC71)),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+            onTap: () {
+               if (item['title'] == 'Pengantar User Interface Design') {
+                  context.push('/material-detail');
+               }
+            },
           ),
         );
       },

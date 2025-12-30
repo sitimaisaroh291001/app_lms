@@ -15,6 +15,7 @@ import 'features/notification/presentation/pages/notification_page.dart';
 import 'features/course/presentation/quiz_detail_screen.dart';
 import 'features/course/presentation/quiz_attempt_screen.dart';
 import 'features/course/presentation/quiz_review_screen.dart';
+import 'features/course/presentation/material_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/user_provider.dart';
 
@@ -105,6 +106,10 @@ final GoRouter _router = GoRouter(
         final questions = state.extra as List<Map<String, dynamic>>? ?? [];
         return QuizReviewScreen(questions: questions);
       }, 
+    ),
+    GoRoute(
+      path: '/material-detail',
+      builder: (context, state) => const MaterialDetailScreen(),
     ),
   ],
 );

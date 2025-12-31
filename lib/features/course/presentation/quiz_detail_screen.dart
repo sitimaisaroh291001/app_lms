@@ -160,7 +160,10 @@ class QuizDetailScreen extends StatelessWidget {
                    const SizedBox(height: 16),
                    ElevatedButton(
                      onPressed: () {
-                        context.pop(); // Returns to previous screen (Class)
+                        // Navigate back to Course Detail (Tabs) and open the specific material sheet
+                        context.go('/course-detail-tabs', extra: {
+                          'openMeetingTitle': '01 - Pengantar User Interface Design'
+                        });
                      }, 
                      style: ElevatedButton.styleFrom(
                        backgroundColor: const Color(0xFFF5F5F5),

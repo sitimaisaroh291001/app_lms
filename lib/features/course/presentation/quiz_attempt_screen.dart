@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:app_lms/features/course/presentation/quiz_review_screen.dart';
 
 class QuizAttemptScreen extends StatefulWidget {
   const QuizAttemptScreen({super.key});
@@ -320,10 +321,14 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
                     child: const Text("Soal Selanjut nya."),
                   )
                 else
-                   ElevatedButton(
+                    ElevatedButton(
                     onPressed: () async {
-                      // Finish quiz -> Go to Review
-                      final result = await context.push<Map<String, dynamic>>('/quiz-review', extra: _questions);
+                      // Finish quiz -> Go to Review (Neutral)
+                      // Pass questions and default isSubmissionResult=false
+                      final result = await context.push<Map<String, dynamic>>('/quiz-review', extra: {
+                        'questions': _questions,
+                        'isSubmissionResult': false,
+                      });
                       
                       if (result != null) {
                         if (result['action'] == 'edit') {
@@ -331,8 +336,14 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
                              _currentIndex = result['index'];
                            });
                         } else if (result['action'] == 'submit') {
-                           // Final Submit
-                           if (mounted) context.pop();
+                           // Final Submit -> Show Result
+                           if (mounted) {
+                             // Use GoRouter replacement to show result state
+                             context.pushReplacement('/quiz-review', extra: {
+                               'questions': _questions,
+                               'isSubmissionResult': true,
+                             });
+                           }
                         }
                       }
                     },

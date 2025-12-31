@@ -3,27 +3,39 @@ import 'package:go_router/go_router.dart';
 
 class QuizReviewScreen extends StatelessWidget {
   final List<Map<String, dynamic>> questions;
+  final bool isSubmissionResult;
 
   const QuizReviewScreen({
     super.key,
     required this.questions,
+    this.isSubmissionResult = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // No scoring calculation here for review mode
+    int correctAnswers = 0;
+    double score = 0;
+    
+    if (isSubmissionResult) {
+      for (var question in questions) {
+        if (question['selected'] == question['correctAnswer']) {
+          correctAnswers++;
+        }
+      }
+      score = (correctAnswers / questions.length) * 100;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          "Review Jawaban",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+          isSubmissionResult ? "Hasil Kuis" : "Review Jawaban",
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFFBE1E2D),
         elevation: 0,
         centerTitle: true,
-        leading: Container(), // Hide back button to force use of buttons
+        leading: isSubmissionResult ? null : Container(), // Hide back button in review, show (or handle custom) in result
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -40,12 +52,15 @@ class QuizReviewScreen extends StatelessWidget {
                 children: [
                   _buildInfoRow("Di Mulai Pada", "Kamis 25 Februari 2021 10:25"),
                   const SizedBox(height: 8),
-                  _buildInfoRow("Status", "Sedang Dikerjakan"), // Changed from Selesai to indicate active review
+                  _buildInfoRow("Status", isSubmissionResult ? "Selesai" : "Sedang Dikerjakan"),
                   const SizedBox(height: 8),
-                  _buildInfoRow("Selesai Pada", "-"),
+                  _buildInfoRow("Selesai Pada", isSubmissionResult ? "Kamis 25 Februari 2021 10:40" : "-"),
                   const SizedBox(height: 8),
-                  _buildInfoRow("Waktu Penyelesaian", "-"),
-                  // Removed Nilai row
+                  _buildInfoRow("Waktu Penyelesaian", isSubmissionResult ? "13 Menit 22 Detik" : "-"),
+                  if (isSubmissionResult) ...[
+                    const SizedBox(height: 8),
+                    _buildInfoRow("Nilai", "${score.toStringAsFixed(0)} / 100"),
+                  ],
                 ],
               ),
             ),
@@ -68,7 +83,17 @@ class QuizReviewScreen extends StatelessWidget {
                 final String optionLabel = selectedIndex != -1 
                     ? String.fromCharCode(65 + selectedIndex) 
                     : "-";
+
+                // Validation logic (only used if isSubmissionResult)
+                final int correctIndex = question['correctAnswer'] ?? -1;
+                final bool isCorrect = selectedIndex == correctIndex;
                 
+                // Colors
+                Color answerColor = Colors.black;
+                if (isSubmissionResult) {
+                  answerColor = isCorrect ? Colors.green : Colors.red;
+                }
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -109,29 +134,55 @@ class QuizReviewScreen extends StatelessWidget {
                                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                "$optionLabel. $answerText",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black, // Neutral color
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "$optionLabel. $answerText",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: answerColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  if (isSubmissionResult)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Icon(
+                                        isCorrect ? Icons.check_circle : Icons.cancel,
+                                        color: isCorrect ? Colors.green : Colors.red,
+                                        size: 16
+                                      ),
+                                    ),
+                                ],
                               ),
+                              if (isSubmissionResult && !isCorrect && correctIndex != -1)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Text(
+                                    "Jawaban Benar: ${String.fromCharCode(65 + correctIndex)}. ${(question['options'] as List)[correctIndex]}",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            context.pop({'action': 'edit', 'index': index});
-                          },
-                          child: const Text(
-                            "Ubah Jawaban", // Changed text to be more actionable
-                            style: TextStyle(
-                              color: Color(0xFF2F80ED),
-                              fontWeight: FontWeight.bold,
+                        if (!isSubmissionResult)
+                          TextButton(
+                            onPressed: () {
+                              context.pop({'action': 'edit', 'index': index});
+                            },
+                            child: const Text(
+                              "Ubah Jawaban",
+                              style: TextStyle(
+                                color: Color(0xFF2F80ED),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ],
@@ -146,7 +197,12 @@ class QuizReviewScreen extends StatelessWidget {
               width: 200,
               child: ElevatedButton(
                 onPressed: () {
-                   context.pop({'action': 'submit'});
+                   if (isSubmissionResult) {
+                     // Go back to course detail or main screen
+                     context.go('/course-detail'); // Or pop until detail
+                   } else {
+                     context.pop({'action': 'submit'});
+                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2ECC71),
@@ -156,9 +212,9 @@ class QuizReviewScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  "Kirim Jawaban",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                child: Text(
+                  isSubmissionResult ? "Kembali ke Modul" : "Kirim Jawaban",
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
             ),

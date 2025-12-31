@@ -105,8 +105,15 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/quiz-review',
       builder: (context, state) {
-        final questions = state.extra as List<Map<String, dynamic>>? ?? [];
-        return QuizReviewScreen(questions: questions);
+        // Handle Map extra for flexible arguments
+        final extra = state.extra as Map<String, dynamic>? ?? {};
+        final questions = (extra['questions'] as List<dynamic>?)?.map((e) => e as Map<String, dynamic>).toList() ?? [];
+        final isSubmissionResult = extra['isSubmissionResult'] as bool? ?? false;
+        
+        return QuizReviewScreen(
+          questions: questions,
+          isSubmissionResult: isSubmissionResult,
+        );
       }, 
     ),
     GoRoute(

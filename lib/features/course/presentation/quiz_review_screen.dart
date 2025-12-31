@@ -198,8 +198,8 @@ class QuizReviewScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                    if (isSubmissionResult) {
-                     // Go back to course detail or main screen
-                     context.go('/course-detail'); // Or pop until detail
+                     // Go back to quiz detail (Quiz Review 1)
+                     context.go('/quiz-detail'); 
                    } else {
                      context.pop({'action': 'submit'});
                    }

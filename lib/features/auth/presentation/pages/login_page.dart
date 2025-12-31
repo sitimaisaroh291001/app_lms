@@ -346,8 +346,15 @@ class BottomWavePainter extends CustomPainter {
 }
 
 // Help Bottom Sheet
-class HelpBottomSheet extends StatelessWidget {
+class HelpBottomSheet extends StatefulWidget {
   const HelpBottomSheet({super.key});
+
+  @override
+  State<HelpBottomSheet> createState() => _HelpBottomSheetState();
+}
+
+class _HelpBottomSheetState extends State<HelpBottomSheet> {
+  bool isEnglish = false; // Default to Indonesian
 
   @override
   Widget build(BuildContext context) {
@@ -376,45 +383,110 @@ class HelpBottomSheet extends StatelessWidget {
            ),
            const SizedBox(height: 24),
            
-           // Language Flags (Static placeholder)
+           // Language Toggle
            Row(
              mainAxisAlignment: MainAxisAlignment.center,
              children: [
-               Column(children: [
-                 const Icon(Icons.flag, color: Colors.red), // ID placeholder
-                 const SizedBox(height: 4),
-                 const Text("ID", style: TextStyle(fontWeight: FontWeight.bold)),
-                 Container(height: 2, width: 20, color: Colors.black),
-               ]),
+               GestureDetector(
+                 onTap: () {
+                   setState(() {
+                     isEnglish = false;
+                   });
+                 },
+                 child: Column(
+                   children: [
+                     // ID Flag placeholder (Red Box)
+                     Container(width: 30, height: 20, color: const Color(0xFFC00000)),
+                     const SizedBox(height: 4),
+                     Text(
+                       "ID",
+                       style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         color: !isEnglish ? Colors.black : Colors.grey,
+                       ),
+                     ),
+                     if (!isEnglish)
+                       Container(height: 2, width: 20, color: Colors.black)
+                     else
+                       const SizedBox(height: 2),
+                   ],
+                 ),
+               ),
                const SizedBox(width: 32),
-               Column(children: [
-                  // UK Flag placeholder
-                 const Icon(Icons.flag_outlined, color: Colors.blue),
-                 const SizedBox(height: 4),
-                 const Text("EN", style: TextStyle(color: Colors.grey)),
-               ]),
+               GestureDetector(
+                 onTap: () {
+                   setState(() {
+                     isEnglish = true;
+                   });
+                 },
+                 child: Column(
+                   children: [
+                     // EN Flag placeholder (Blue Box/Union Jack style)
+                     Container(
+                       width: 30, 
+                       height: 20, 
+                       color: const Color(0xFF00247D),
+                       child: Stack(
+                         children: [
+                            Center(child: Container(width: 30, height: 4, color: Colors.white)),
+                            Center(child: Container(width: 4, height: 20, color: Colors.white)),
+                            Center(child: Container(width: 30, height: 2, color: const Color(0xFFC00000))),
+                            Center(child: Container(width: 2, height: 20, color: const Color(0xFFC00000))),
+                         ],
+                       ),
+                     ), 
+                     const SizedBox(height: 4),
+                     Text(
+                       "EN",
+                       style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         color: isEnglish ? Colors.black : Colors.grey,
+                       ),
+                     ),
+                     if (isEnglish)
+                       Container(height: 2, width: 20, color: Colors.black)
+                     else
+                       const SizedBox(height: 2),
+                   ],
+                 ),
+               ),
              ],
            ),
            const SizedBox(height: 24),
            
-           const Text(
-             "Akses hanya untuk Dosen dan Mahasiswa Telkom University.",
-             style: TextStyle(fontWeight: FontWeight.bold),
+           Text(
+             isEnglish 
+                 ? "Access restricted only for Lecturer and Student of Telkom University"
+                 : "Akses hanya untuk Dosen dan Mahasiswa Telkom University.",
+             style: const TextStyle(fontWeight: FontWeight.bold),
            ),
            const SizedBox(height: 12),
            _buildHelpItem(
-             "1. Login menggunakan Akun Microsoft Office 365 dengan mengikuti petunjuk berikut :",
+             isEnglish 
+                 ? "Login only using your Microsoft Office 365 Account by following these format :"
+                 : "1. Login menggunakan Akun Microsoft Office 365 dengan mengikuti petunjuk berikut :",
+             bullet: isEnglish ? null : "1.",
            ),
            _buildHelpItem(
-             "2. Username (Akun iGracias) ditambahkan \"@365.telkomuniversity.ac.id\"\nPassword (Akun iGracias) pada kolom Password.",
+             isEnglish
+                 ? "Username (iGracias Account) followed with \"@365.telkomuniversity.ac.id\"\nPassword (SSO / iGracias Account) on Password Field."
+                 : "2. Username (Akun iGracias) ditambahkan \"@365.telkomuniversity.ac.id\"\nPassword (Akun iGracias) pada kolom Password.",
+              bullet: isEnglish ? null : "2.",
            ),
            _buildHelpItem(
-             "3. Kegagalan yang terjadi pada Autentikasi disebabkan oleh Anda belum mengubah Password Anda menjadi \"Strong Password\". Pastikan Anda telah melakukan perubahan Password di iGracias.",
+             isEnglish
+                 ? "Failure upon Authentication could be possibly you have not yet change your password into \"Strong Password\". Make sure to change your Password only in iGracias."
+                 : "3. Kegagalan yang terjadi pada Autentikasi disebabkan oleh Anda belum mengubah Password Anda menjadi \"Strong Password\". Pastikan Anda telah melakukan perubahan Password di iGracias.",
+             bullet: isEnglish ? null : "3.",
            ),
            const SizedBox(height: 16),
-           const Text("Informasi lebih lanjut dapat menghubungi Layanan CeLOE Helpdesk di :"),
+           Text(
+             isEnglish 
+                 ? "For further Information, please contact CeLOE Service Helpdesk :"
+                 : "Informasi lebih lanjut dapat menghubungi Layanan CeLOE Helpdesk di :",
+           ),
            const SizedBox(height: 8),
-           const Text("Mail : infoceloe@telkomuniversity.ac.id"),
+           const Text("mail : infoceloe@telkomuniversity.ac.id"),
            const Text("whatsapp : +62 821-1666-3563"),
            const SizedBox(height: 24),
         ],
@@ -422,9 +494,20 @@ class HelpBottomSheet extends StatelessWidget {
     );
   }
   
-  Widget _buildHelpItem(String text) {
+  Widget _buildHelpItem(String text, {String? bullet}) {
+    // English version in image doesn't seem to have numbering, just paragraphs. 
+    // But aligning logic: if bullet provided, use it.
+    if (bullet != null) {
+      // Indent logic or row
+       return Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Text(text, style: const TextStyle(height: 1.4, fontSize: 13)),
+      );
+    }
+    
+    // For English paragraphs
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Text(text, style: const TextStyle(height: 1.4, fontSize: 13)),
     );
   }

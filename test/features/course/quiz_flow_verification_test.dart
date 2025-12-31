@@ -5,9 +5,9 @@ import 'package:app_lms/features/course/presentation/quiz_attempt_screen.dart';
 
 void main() {
   group('Quiz Scoring Verification', () {
-    testWidgets('QuizReviewScreen calculates 100% score correctly', (WidgetTester tester) async {
+    testWidgets('QuizReviewScreen shows neutral state (no scoring)', (WidgetTester tester) async {
       // Arrange
-      final correctQuestions = [
+      final questions = [
         {
           "question": "Q1",
           "options": ["A", "B", "C", "D", "E"],
@@ -17,55 +17,6 @@ void main() {
         {
           "question": "Q2",
           "options": ["A", "B", "C", "D", "E"],
-          "selected": 1,
-          "correctAnswer": 1
-        },
-      ];
-
-      // Act
-      await tester.pumpWidget(MaterialApp(
-        home: QuizReviewScreen(questions: correctQuestions),
-      ));
-      await tester.pumpAndSettle();
-
-      // Assert
-      expect(find.text('100 / 100'), findsOneWidget);
-    });
-
-    testWidgets('QuizReviewScreen calculates 50% score correctly', (WidgetTester tester) async {
-      // Arrange
-      final mixedQuestions = [
-        {
-          "question": "Q1",
-          "options": ["A", "B", "C", "D", "E"],
-          "selected": 0, // Correct
-          "correctAnswer": 0
-        },
-        {
-          "question": "Q2",
-          "options": ["A", "B", "C", "D", "E"],
-          "selected": 0, // Incorrect (should be 1)
-          "correctAnswer": 1
-        },
-      ];
-
-      // Act
-      await tester.pumpWidget(MaterialApp(
-        home: QuizReviewScreen(questions: mixedQuestions),
-      ));
-      await tester.pumpAndSettle();
-
-      // Assert
-      expect(find.text('50 / 100'), findsOneWidget);
-      expect(find.text('Jawaban Tersimpan'), findsNWidgets(2));
-    });
-
-    testWidgets('QuizReviewScreen calculates 0% score correctly', (WidgetTester tester) async {
-       // Arrange
-      final wrongQuestions = [
-        {
-          "question": "Q1",
-          "options": ["A", "B", "C", "D", "E"],
           "selected": 1, // Wrong
           "correctAnswer": 0
         },
@@ -73,12 +24,22 @@ void main() {
 
       // Act
       await tester.pumpWidget(MaterialApp(
-        home: QuizReviewScreen(questions: wrongQuestions),
+        home: QuizReviewScreen(questions: questions),
       ));
       await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text('0 / 100'), findsOneWidget);
+      // Should NOT show score
+      expect(find.textContaining('/ 100'), findsNothing);
+      
+      // Should show status "Sedang Dikerjakan"
+      expect(find.text('Sedang Dikerjakan'), findsOneWidget);
+
+      // Should NOT show "Jawaban Benar"
+      expect(find.text('Jawaban Benar'), findsNothing);
+
+      // Should show "Ubah Jawaban"
+      expect(find.text('Ubah Jawaban'), findsWidgets);
     });
   });
 

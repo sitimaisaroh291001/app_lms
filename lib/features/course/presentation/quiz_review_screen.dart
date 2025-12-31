@@ -11,13 +11,7 @@ class QuizReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int correctAnswers = 0;
-    for (var question in questions) {
-      if (question['selected'] == question['correctAnswer']) {
-        correctAnswers++;
-      }
-    }
-    final double score = (correctAnswers / questions.length) * 100;
+    // No scoring calculation here for review mode
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -46,13 +40,12 @@ class QuizReviewScreen extends StatelessWidget {
                 children: [
                   _buildInfoRow("Di Mulai Pada", "Kamis 25 Februari 2021 10:25"),
                   const SizedBox(height: 8),
-                  _buildInfoRow("Status", "Selesai"),
+                  _buildInfoRow("Status", "Sedang Dikerjakan"), // Changed from Selesai to indicate active review
                   const SizedBox(height: 8),
-                  _buildInfoRow("Selesai Pada", "Kamis 25 Februari 2021 10:40"),
+                  _buildInfoRow("Selesai Pada", "-"),
                   const SizedBox(height: 8),
-                  _buildInfoRow("Waktu Penyelesaian", "13 Menit 22 Detik"),
-                  const SizedBox(height: 8),
-                  _buildInfoRow("Nilai", "${score.toStringAsFixed(0)} / 100"),
+                  _buildInfoRow("Waktu Penyelesaian", "-"),
+                  // Removed Nilai row
                 ],
               ),
             ),
@@ -67,8 +60,7 @@ class QuizReviewScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final question = questions[index];
                 final int selectedIndex = question['selected'] ?? -1;
-                final int correctIndex = question['correctAnswer'] ?? -1;
-                
+               
                 // ignore: avoid_dynamic_calls
                 final String answerText = selectedIndex != -1 
                     ? (question['options'] as List)[selectedIndex] 
@@ -77,8 +69,6 @@ class QuizReviewScreen extends StatelessWidget {
                     ? String.fromCharCode(65 + selectedIndex) 
                     : "-";
                 
-                final bool isCorrect = selectedIndex == correctIndex;
-
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -119,40 +109,14 @@ class QuizReviewScreen extends StatelessWidget {
                                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                               ),
                               const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Text(
-                                    "$optionLabel. $answerText",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: isCorrect ? Colors.green : Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  if (isCorrect)
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Icon(Icons.check_circle, color: Colors.green, size: 16),
-                                    )
-                                  else
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Icon(Icons.cancel, color: Colors.red, size: 16),
-                                    ),
-                                ],
-                              ),
-                              if (!isCorrect && correctIndex != -1)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: Text(
-                                    "Jawaban Benar: ${String.fromCharCode(65 + correctIndex)}. ${(question['options'] as List)[correctIndex]}",
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                              Text(
+                                "$optionLabel. $answerText",
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black, // Neutral color
+                                  fontWeight: FontWeight.bold,
                                 ),
+                              ),
                             ],
                           ),
                         ),
@@ -161,7 +125,7 @@ class QuizReviewScreen extends StatelessWidget {
                             context.pop({'action': 'edit', 'index': index});
                           },
                           child: const Text(
-                            "Lihat Soal",
+                            "Ubah Jawaban", // Changed text to be more actionable
                             style: TextStyle(
                               color: Color(0xFF2F80ED),
                               fontWeight: FontWeight.bold,

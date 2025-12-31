@@ -11,6 +11,14 @@ class QuizReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int correctAnswers = 0;
+    for (var question in questions) {
+      if (question['selected'] == question['correctAnswer']) {
+        correctAnswers++;
+      }
+    }
+    final double score = (correctAnswers / questions.length) * 100;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -44,7 +52,7 @@ class QuizReviewScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   _buildInfoRow("Waktu Penyelesaian", "13 Menit 22 Detik"),
                   const SizedBox(height: 8),
-                  _buildInfoRow("Nilai", "0 / 100"),
+                  _buildInfoRow("Nilai", "${score.toStringAsFixed(0)} / 100"),
                 ],
               ),
             ),
@@ -59,6 +67,8 @@ class QuizReviewScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final question = questions[index];
                 final int selectedIndex = question['selected'] ?? -1;
+                final int correctIndex = question['correctAnswer'] ?? -1;
+                
                 // ignore: avoid_dynamic_calls
                 final String answerText = selectedIndex != -1 
                     ? (question['options'] as List)[selectedIndex] 
@@ -66,6 +76,8 @@ class QuizReviewScreen extends StatelessWidget {
                 final String optionLabel = selectedIndex != -1 
                     ? String.fromCharCode(65 + selectedIndex) 
                     : "-";
+                
+                final bool isCorrect = selectedIndex == correctIndex;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,10 +119,40 @@ class QuizReviewScreen extends StatelessWidget {
                                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                "$optionLabel. $answerText",
-                                style: const TextStyle(fontSize: 12),
+                              Row(
+                                children: [
+                                  Text(
+                                    "$optionLabel. $answerText",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: isCorrect ? Colors.green : Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  if (isCorrect)
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Icon(Icons.check_circle, color: Colors.green, size: 16),
+                                    )
+                                  else
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Icon(Icons.cancel, color: Colors.red, size: 16),
+                                    ),
+                                ],
                               ),
+                              if (!isCorrect && correctIndex != -1)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Text(
+                                    "Jawaban Benar: ${String.fromCharCode(65 + correctIndex)}. ${(question['options'] as List)[correctIndex]}",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         ),

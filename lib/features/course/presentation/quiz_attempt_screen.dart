@@ -12,34 +12,105 @@ class _QuizAttemptScreenState extends State<QuizAttemptScreen> {
   int _currentIndex = 0;
   final int _totalQuestions = 15;
   
-  // Dummy data for questions
+  // Data for questions
   final List<Map<String, dynamic>> _questions = [
     {
-      "question": "Radio button dapat digunakan untuk menentukan ?",
-      "options": ["Jenis Kelamin", "Alamat", "Hobby", "Riwayat Pendidikan", "Umur"],
-      "selected": -1, // -1 means none selected
+      "question": "Radio button dapat digunakan untuk menentukan?",
+      "options": ["Alamat", "Hobi", "Riwayat Pendidikan", "Umur", "Jenis kelamin"],
+      "selected": -1,
+      "correctAnswer": 4, // E. Jenis kelamin
     },
     {
-      "question": "Dalam perancangan web yang baik, untuk teks yang menyampaikan isi konten digunakan font yang sama di setiap halaman, ini merupakan salah satu tujuan yaitu ?",
-      "options": ["Intergrasi", "Standarisasi", "Konsistensi", "Koefensi", "Koreksi"],
+      "question": "Dalam perancangan web yang baik, untuk teks yang menyampaikan isi konten digunakan font yang sama di setiap halaman, ini merupakan salah satu tujuan yaitu?",
+      "options": ["Integrasi", "Standarisasi", "Konsistensi", "Koherensi", "Koreksi"],
       "selected": -1,
+      "correctAnswer": 2, // C. Konsistensi
     },
-    
-    // Generate more dummy questions to reach 15 or reuse
+    {
+      "question": "Tombol yang digunakan untuk mengirim data isian formulir ke server disebut?",
+      "options": ["Reset", "Cancel", "Submit", "Upload", "Delete"],
+      "selected": -1,
+      "correctAnswer": 2, // C. Submit
+    },
+    {
+      "question": "HTML merupakan singkatan dari?",
+      "options": ["Hyperlink Text Markup Language", "Hyper Text Modern Language", "Hyper Text Markup Language", "Hyper Transfer Markup Language", "Hyper Tool Markup Language"],
+      "selected": -1,
+      "correctAnswer": 2, // C. Hyper Text Markup Language
+    },
+    {
+      "question": "Tag HTML untuk membuat baris baru adalah?",
+      "options": ["<p>", "<hr>", "<div>", "<br>", "<span>"],
+      "selected": -1,
+      "correctAnswer": 3, // D. <br>
+    },
+    {
+      "question": "CSS digunakan untuk?",
+      "options": ["Mengolah database", "Menjalankan server", "Mengatur tampilan halaman web", "Membuat tabel", "Menyimpan data"],
+      "selected": -1,
+      "correctAnswer": 2, // C. Mengatur tampilan halaman web
+    },
+    {
+      "question": "Tag HTML untuk menampilkan gambar adalah?",
+      "options": ["<image>", "<pic>", "<photo>", "<img>", "<src>"],
+      "selected": -1,
+      "correctAnswer": 3, // D. <img>
+    },
+    {
+      "question": "Properti CSS untuk mengubah warna teks adalah?",
+      "options": ["font-style", "background-color", "color", "text-align", "border"],
+      "selected": -1,
+      "correctAnswer": 2, // C. color
+    },
+    {
+      "question": "Elemen <a> dalam HTML berfungsi untuk?",
+      "options": ["Menampilkan gambar", "Menampilkan tabel", "Membuat hyperlink", "Menulis paragraf", "Mengatur layout"],
+      "selected": -1,
+      "correctAnswer": 2, // C. Membuat hyperlink
+    },
+    {
+      "question": "Input type yang digunakan untuk memilih satu jawaban saja adalah?",
+      "options": ["Checkbox", "Text", "Password", "Email", "Radio"],
+      "selected": -1,
+      "correctAnswer": 4, // E. Radio
+    },
+    {
+      "question": "Properti CSS untuk mengatur ukuran teks adalah?",
+      "options": ["text-style", "font-size", "font-weight", "line-height", "text-transform"],
+      "selected": -1,
+      "correctAnswer": 1, // B. font-size
+    },
+    {
+      "question": "Tag untuk membuat daftar tidak berurutan adalah?",
+      "options": ["<ol>", "<li>", "<ul>", "<dl>", "<list>"],
+      "selected": -1,
+      "correctAnswer": 2, // C. <ul>
+    },
+    {
+      "question": "Fungsi dari tag <title> adalah?",
+      "options": ["Memberi judul halaman pada browser", "Menampilkan heading", "Membuat paragraf", "Memberi warna halaman", "Mengatur margin"],
+      "selected": -1,
+      "correctAnswer": 0, // A. Memberi judul halaman pada browser
+    },
+    {
+      "question": "Properti CSS text-align: center; berfungsi untuk?",
+      "options": ["Mengubah warna teks", "Mengubah jenis font", "Meratakan teks ke tengah", "Menebalkan teks", "Mengatur jarak baris"],
+      "selected": -1,
+      "correctAnswer": 2, // C. Meratakan teks ke tengah
+    },
+    {
+      "question": "Input type password digunakan untuk?",
+      "options": ["Menulis email", "Menulis angka", "Menyembunyikan karakter input", "Mengunggah file", "Menulis teks biasa"],
+      "selected": -1,
+      "correctAnswer": 2, // C. Menyembunyikan karakter input
+    },
   ];
 
   @override
   void initState() {
     super.initState();
-    // Fill up to 15 questions
-    while (_questions.length < 15) {
-      _questions.add({
-        "question": "Pertanyaan nomor ${_questions.length + 1} contoh text default...",
-        "options": ["Pilihan A", "Pilihan B", "Pilihan C", "Pilihan D", "Pilihan E"],
-        "selected": -1,
-      });
-    }
   }
+
 
   @override
   Widget build(BuildContext context) {
